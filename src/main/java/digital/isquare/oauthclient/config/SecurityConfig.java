@@ -32,7 +32,7 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 class SecurityConfig {
 
     private static final String GROUPS = "groups";
-    private static final String REALM_ACCESS_CLAIM = "realm_accessy";
+    private static final String REALM_ACCESS_CLAIM = "realm_access_claims";
     private static final String ROLES_CLAIM = "roles";
 
     private final KeycloakLogoutHandler keycloakLogoutHandler;
@@ -80,7 +80,7 @@ class SecurityConfig {
                 .requestMatchers(new AntPathRequestMatcher("/customers/**", HttpMethod.OPTIONS.name()))
                 .permitAll()
                 .requestMatchers(new AntPathRequestMatcher("/customers/**"))
-                .hasRole("user")
+                .hasRole("customer_role")
                 .anyRequest()
                 .authenticated());
         http.oauth2ResourceServer(oauth2 -> oauth2

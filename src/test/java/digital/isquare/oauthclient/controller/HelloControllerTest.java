@@ -15,6 +15,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.Map;
 
@@ -45,9 +46,23 @@ class HelloControllerTest {
     @BeforeEach
     void setUp() {
 
+        String url = "http://localhost:8081/customers";
 
+        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+        params.add("client_id", "springboot-openid-client-app");
+        params.add("client_secret", "0IezYl1fYSX3XuyW4ZlayA9KqisItfQ0");
+        params.add("username", "my-user");
+        params.add("password", "P@ssw0rd");
+        params.add("grant_type", "password");
+        params.add("scope", "openid");
+
+        UriComponentsBuilder builder;
+        builder = UriComponentsBuilder.fromHttpUrl(url);
+        Map<String, String> response = restTemplate.postForObject(builder.toUriString(), null, Map.class);
+
+        assert response != null;
+        accessToken = response.get("access_token");
     }
-
     @Test
     void getPublic() throws Exception {
         mockMvc.perform(get("/api/public")
